@@ -5,13 +5,13 @@
 
 ## WRRC
 
-![WRRC](./assets/wrrc.png)
+![WRRC](./assets/wrrc.jpg)
 
 ## Overview
 
 ### Project Features
 
-#### this api lets you find movies based on thier name and lets you find favorite movies also based on your selections
+#### this api lets you find trending movies worldwide and also lets you find similar movies to what you want and also find reviews for a specific movie and also lets you search and get movies based on its name;
 
 ## getting started
 

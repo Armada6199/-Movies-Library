@@ -1,8 +1,13 @@
 const express=require("express");
 const cors=require("cors");
+const axios=require("axios");
+require('dotenv').config()
+const PORT=process.env.PORT;
+const url=process.env.URL;
+const key=process.env.KEY;
 const app=express();
-const movies=require("./Movie data/data.json");
 app.use(cors());
+app.use(express.json())
 function Movies(title,posterPath,overview){
     this.title=title,
     this.posterPath=posterPath,
@@ -22,26 +27,53 @@ function handleServerErorr(){
         responeText:"Sorry something went wrong"
     }
 }
+
 app.get('/',(req,res)=>{
     try{
-        res.send(movies);
+        res.send("dsa");
     }catch{
         let error=handleServerErorr();
         res.status(error.status).send(error.responeText); 
     }
 })
-app.get('/favorite',(req,res)=>{
+app.get('/trending',(req,res)=>{
     try{
-        res.send("welcome to favorite page")
-    }catch{
-        let error=handleServerErorr();
-        res.status(error.status).send(error.responeText)
+    //  let movie=await axios.get(`${url}trending/all/week?api_key=${key}`);
+      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
+      .then((resp)=>{
+        res.send(resp.data)
+    })
+     
+   
+    }catch(err){
+        console.log(err)
     }
 })
+
+app.get('/search/:movieName',async(req,res)=>{
+    let movieName=req.params.movieName;
+    try{
+        let movie=await axios.get(`${url}search/movie?api_key=${key}&language=en-US&query=${movieName}`)
+        res.send(movie.data)
+    }catch(err){
+        console.log(err)
+    }
+})
+app.get('/movie/:id/reviews',async(req,res)=>{
+    const movieId=req.params.id;
+    let movieRev=await axios.get(`${url}movie/${movieId}/reviews?api_key=${key}&language=en-US`);
+    res.send(movieRev.data.results)
+})
+app.get('/movie/:id/similar',async(req,res)=>{
+    let movieId=req.params.id;
+    let similarMovie=await axios.get(`${url}movie/${movieId}/similar?api_key=${key}&language=en-US`)
+    res.send(similarMovie.data.results)
+})
+
 app.get('*',(req,res)=>{
     let error=handleNotFound();
     res.status(error.status).send(error.responeText)
 })
-app.listen(5000,()=>{
-    console.log("listening on 5000")
+app.listen(PORT,()=>{
+    console.log(`listening on ${PORT}`)
 })
