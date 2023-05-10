@@ -5,13 +5,17 @@
 
 ## WRRC
 
-![WRRC](./assets/wrrc.png)
+![WRRC](./assets/wrrc.jpg)
 
 ## Overview
 
 ### Project Features
 
-#### this api lets you find trending movies worldwide and also lets you find similar movies to what you want and also find reviews for a specific movie and also lets you search and get movies based on its name;
+#### this api lets you find trending movies worldwide and also lets you find similar movies to what you want and also find reviews for a specific movie and also lets you search and get movies based on its name
+
+## adding database
+
+### connected the api with postgres database and added two more routes which are a post request to add a movie and a get request to get all the movies
 
 ## getting started
 

@@ -1,13 +1,16 @@
 const express=require("express");
 const cors=require("cors");
 const axios=require("axios");
+const pg=require('pg');
 require('dotenv').config()
 const PORT=process.env.PORT;
 const url=process.env.URL;
 const key=process.env.KEY;
+const client=new pg.Client(process.env.DBURL);
 const app=express();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
+
 function Movies(title,posterPath,overview){
     this.title=title,
     this.posterPath=posterPath,
@@ -36,18 +39,29 @@ app.get('/',(req,res)=>{
         res.status(error.status).send(error.responeText); 
     }
 })
+app.get('/movies',async(req,res)=>{
+    const sql=`select * from movies`;
+    client.query(sql).then(data=>{
+        res.json(data.rows)
+    }).catch(err=>console.error(err))
+})
+app.post('/movies',async(req,res)=>{
+    console.log(req.body,"body")
+    const userInput=req.body;
+    const sql=`insert into movies(title,relase_date,comments,rating) values
+    ($1,$2,$3,$4);`;
+    const values=[userInput.title,userInput.relase_date,userInput.comments,userInput.rating]
+   client.query(sql,values)
+   .then(response=>res.send(response))
+   .catch(err=>console.error(err))
+})
 app.get('/trending',(req,res)=>{
-   
     try{
-    //  let movie=await axios.get(`${url}trending/all/week?api_key=${key}`);
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
       .then((resp)=>{
-        console.log(resp)
+
         res.send(resp.data)
-        
     })
-     
-   
     }catch(err){
         console.log(err)
     }
@@ -55,7 +69,6 @@ app.get('/trending',(req,res)=>{
 
 app.get('/search',async(req,res)=>{
     let movieName=req.query;
-    
     try{
         let movie=await axios.get(`${url}search/movie?api_key=${key}&language=en-US&query=${movieName}`)
         res.send(movie.data)
@@ -77,7 +90,10 @@ app.get('/movie/:id/similar',async(req,res)=>{
 app.get('*',(req,res)=>{
     let error=handleNotFound();
     res.status(error.status).send(error.responeText)
-})
-app.listen(PORT,()=>{
-    console.log(`listening on ${PORT}`)
+});
+client.connect().then(con=>{
+    app.listen(PORT,()=>{
+        console.log(con);
+        console.log(`listening on ${PORT}`)
+    })
 })
