@@ -37,11 +37,14 @@ app.get('/',(req,res)=>{
     }
 })
 app.get('/trending',(req,res)=>{
+   
     try{
     //  let movie=await axios.get(`${url}trending/all/week?api_key=${key}`);
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
       .then((resp)=>{
+        console.log(resp)
         res.send(resp.data)
+        
     })
      
    
@@ -50,8 +53,9 @@ app.get('/trending',(req,res)=>{
     }
 })
 
-app.get('/search/:movieName',async(req,res)=>{
-    let movieName=req.params.movieName;
+app.get('/search',async(req,res)=>{
+    let movieName=req.query;
+    
     try{
         let movie=await axios.get(`${url}search/movie?api_key=${key}&language=en-US&query=${movieName}`)
         res.send(movie.data)
