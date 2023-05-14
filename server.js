@@ -8,13 +8,15 @@ const key=process.env.KEY;
 const app=express();
 app.use(cors());
 app.use(express.json())
-function Movies(title,posterPath,overview){
+function Movie(id,title,relase_date,poster_path,overview){
+    this.id=id,
     this.title=title,
-    this.posterPath=posterPath,
+    this.poster_path=poster_path,
+    this.relase_date=relase_date,
     this.overview=overview,
-    this.allMovies.push(this)
+    Movie.allMovies.push(this)
 }
-Movies.allMovies=[];
+Movie.allMovies=[];
 function handleNotFound(){
     return {
     status:404,
@@ -37,17 +39,16 @@ app.get('/',(req,res)=>{
     }
 })
 app.get('/trending',(req,res)=>{
-   
     try{
-    //  let movie=await axios.get(`${url}trending/all/week?api_key=${key}`);
-      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
-      .then((resp)=>{
-        console.log(resp)
-        res.send(resp.data)
-        
-    })
-     
-   
+      axios.get(`${url}trending/all/week?api_key=${key}`)
+      .then((resp)=>resp.data)
+      .then(data=>{
+        data=data.results;
+        for(let i=0;i<data.length;i++){
+        new Movie(data[i].id,data[i].title,data[i].relase_date,data[i].poster_path,data[i].overview);
+        }
+        res.send(Movie.allMovies)
+      })
     }catch(err){
         console.log(err)
     }
