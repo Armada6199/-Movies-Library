@@ -1,47 +1,49 @@
 const express=require("express");
 const cors=require("cors");
+const axios=require("axios");
+const movieData=require("./Movie data/data.json")
+require('dotenv').config()
+const PORT=5000;
 const app=express();
-const movies=require("./Movie data/data.json");
 app.use(cors());
-function Movies(title,posterPath,overview){
+app.use(express.json())
+function Movie(title,poster_path,overview){
     this.title=title,
-    this.posterPath=posterPath,
+    this.poster_path=poster_path,
     this.overview=overview,
-    this.allMovies.push(this)
+    Movie.allMovies.push(this)
 }
-Movies.allMovies=[];
+Movie.allMovies=[];
 function handleNotFound(){
     return {
     status:404,
     responeText:"Sorry, Page Not found"
     }
 }
-function handleServerErorr(){
-    return {
-        status:500,
-        responeText:"Sorry something went wrong"
-    }
+function handleServerErorr(res){
+  res.status(500).send("sorry, something went wrong")
 }
-app.get('/',(req,res)=>{
+
+app.get('/',(req,res,next)=>{
     try{
-        res.send(movies);
+        let newMovie=new Movie(movieData.title,movieData.poster_path,movieData.overview)
+        res.send(newMovie)
     }catch{
-        let error=handleServerErorr();
-        res.status(error.status).send(error.responeText); 
+        handleServerErorr(res);
     }
 })
-app.get('/favorite',(req,res)=>{
-    try{
-        res.send("welcome to favorite page")
-    }catch{
-        let error=handleServerErorr();
-        res.status(error.status).send(error.responeText)
-    }
+app.get('/favorite',(req,res,next)=>{
+   try{
+    res.send("welcome to favorite page")
+   }catch{
+    handleServerErorr(res);
+   }
+    
 })
 app.get('*',(req,res)=>{
     let error=handleNotFound();
     res.status(error.status).send(error.responeText)
 })
-app.listen(5000,()=>{
-    console.log("listening on 5000")
+app.listen(PORT,()=>{
+    console.log(`listening on ${PORT}`)
 })
