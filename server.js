@@ -54,38 +54,59 @@ app.post('/movies',async(req,res)=>{
    client.query(sql,values)
    .then(response=>res.send(response))
    .catch(err=>console.error(err))
-})
-app.get('/trending',(req,res)=>{
-    try{
-      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
-      .then((resp)=>{
-
-        res.send(resp.data)
-    })
-    }catch(err){
-        console.log(err)
-    }
-})
-
-app.get('/search',async(req,res)=>{
-    let movieName=req.query;
-    try{
-        let movie=await axios.get(`${url}search/movie?api_key=${key}&language=en-US&query=${movieName}`)
-        res.send(movie.data)
-    }catch(err){
-        console.log(err)
-    }
-})
-app.get('/movie/:id/reviews',async(req,res)=>{
+});
+app.get('/movie/:id',async(req,res)=>{
     const movieId=req.params.id;
-    let movieRev=await axios.get(`${url}movie/${movieId}/reviews?api_key=${key}&language=en-US`);
-    res.send(movieRev.data.results)
+    const sql=`SELECT * from movies WHERE id=${movieId};`
+    let movie=await client.query(sql);
+    res.status(200).send(movie.rows);
 })
-app.get('/movie/:id/similar',async(req,res)=>{
+app.put('/update/:id',async(req,res)=>{
     let movieId=req.params.id;
-    let similarMovie=await axios.get(`${url}movie/${movieId}/similar?api_key=${key}&language=en-US`)
-    res.send(similarMovie.data.results)
+    const {comments}=req.body;
+    const values=[comments,movieId]
+    const sql=`UPDATE movies SET comments=$1 WHERE id=$2;`;
+let data=await client.query(sql,values)
+res.status(200).send(data);
+});
+app.delete('/delete/:id',async(req,res)=>{
+    let movieId=req.params.id;
+    const sql=`DELETE FROM movies WHERE id=${movieId};`
+    const deletedMovie=await client.query(sql)
+    res.status(200).send(deletedMovie);
 })
+// app.get('/trending',(req,res)=>{
+//     try{
+//       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
+//       .then((resp)=>{
+//         console.log(typeof resp.data)
+//         res.send(resp.data)
+//     })
+//     }catch(err){
+//         console.log(err)
+//     }
+// })
+
+// app.get('/search',async(req,res)=>{
+//     let movieName=req.query;
+//     try{
+//         let movie=await axios.get(`${url}search/movie?api_key=${key}&language=en-US&query=${movieName}`)
+//         res.send(movie.data)
+//     }catch(err){
+//         console.log(err)
+//     }
+// })
+// app.get('/movie/:id/reviews',async(req,res)=>{
+//     const movieId=req.params.id;
+//     let movieRev=await axios.get(`${url}movie/${movieId}/reviews?api_key=${key}&language=en-US`);
+//     res.send(movieRev.data.results)
+// })
+// app.get('/movie/:id/similar',async(req,res)=>{
+//     let movieId=req.params.id;
+//     let similarMovie=await axios.get(`${url}movie/${movieId}/similar?api_key=${key}&language=en-US`)
+//     res.send(similarMovie.data.results)
+// })
+
 
 app.get('*',(req,res)=>{
     let error=handleNotFound();

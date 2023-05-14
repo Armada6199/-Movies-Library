@@ -5,13 +5,18 @@
 
 ## WRRC
 
-![WRRC](./assets/wrrc.jpg)
+## lab 14 image handwriting
+
+![WRRC](./assets/wrrclab14.jpg)
+.
 
 ## Overview
 
 ### Project Features
 
 #### this api lets you find trending movies worldwide and also lets you find similar movies to what you want and also find reviews for a specific movie and also lets you search and get movies based on its name
+
+### in lab 14 i added the ability to get a movie by its id and also change its comments and delete it from the data base
 
 ## adding database
 
