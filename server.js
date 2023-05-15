@@ -39,42 +39,42 @@ app.get('/',(req,res)=>{
         res.status(error.status).send(error.responeText); 
     }
 })
-app.get('/movies',(req,res)=>{
-    const sql=`select * from movies`;
-    client.query(sql).then(data=>{
-        res.json(data.rows)
-    }).catch(err=>console.error(err))
-})
-app.post('/movies',(req,res)=>{
-    console.log(req.body,"body")
-    const userInput=req.body;
-    const sql=`insert into movies(title,relase_date,comments,rating) values
-    ($1,$2,$3,$4);`;
-    const values=[userInput.title,userInput.relase_date,userInput.comments,userInput.rating]
-   client.query(sql,values)
-   .then(response=>res.send(response))
-   .catch(err=>console.error(err))
-});
-app.get('/movie/:id',async(req,res)=>{
-    const movieId=req.params.id;
-    const sql=`SELECT * from movies WHERE id=${movieId};`
-    let movie=await client.query(sql);
-    res.status(200).send(movie.rows);
-})
-app.put('/update/:id',async(req,res)=>{
-    let movieId=req.params.id;
-    const {comments}=req.body;
-    const values=[comments,movieId]
-    const sql=`UPDATE movies SET comments=$1 WHERE id=$2;`;
-let data=await client.query(sql,values)
-res.status(200).send(data);
-});
-app.delete('/delete/:id',async(req,res)=>{
-    let movieId=req.params.id;
-    const sql=`DELETE FROM movies WHERE id=${movieId};`
-    const deletedMovie=await client.query(sql)
-    res.status(200).send(deletedMovie);
-})
+// app.get('/movies',(req,res)=>{
+//     const sql=`select * from movies`;
+//     client.query(sql).then(data=>{
+//         res.json(data.rows)
+//     }).catch(err=>console.error(err))
+// })
+// app.post('/movies',(req,res)=>{
+//     console.log(req.body,"body")
+//     const userInput=req.body;
+//     const sql=`insert into movies(title,relase_date,comments,rating) values
+//     ($1,$2,$3,$4);`;
+//     const values=[userInput.title,userInput.relase_date,userInput.comments,userInput.rating]
+//    client.query(sql,values)
+//    .then(response=>res.send(response))
+//    .catch(err=>console.error(err))
+// });
+// app.get('/movie/:id',async(req,res)=>{
+//     const movieId=req.params.id;
+//     const sql=`SELECT * from movies WHERE id=${movieId};`
+//     let movie=await client.query(sql);
+//     res.status(200).send(movie.rows);
+// })
+// app.put('/update/:id',async(req,res)=>{
+//     let movieId=req.params.id;
+//     const {comments}=req.body;
+//     const values=[comments,movieId]
+//     const sql=`UPDATE movies SET comments=$1 WHERE id=$2;`;
+// let data=await client.query(sql,values)
+// res.status(200).send(data);
+// });
+// app.delete('/delete/:id',async(req,res)=>{
+//     let movieId=req.params.id;
+//     const sql=`DELETE FROM movies WHERE id=${movieId};`
+//     const deletedMovie=await client.query(sql)
+//     res.status(200).send(deletedMovie);
+// })
 // app.get('/trending',(req,res)=>{
 //     try{
 //       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&callback=test&query=The&page=2&language=en-US`)
