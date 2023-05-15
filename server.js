@@ -111,4 +111,4 @@ app.get('/',(req,res)=>{
 // });
 client.connect().then(con=>{
     app.listen(PORT,()=>console.log(`listening on ${PORT}`))
-}).catch(err=>console.log(err))
+})
