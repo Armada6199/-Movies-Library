@@ -39,13 +39,13 @@ app.get('/',(req,res)=>{
         res.status(error.status).send(error.responeText); 
     }
 })
-app.get('/movies',async(req,res)=>{
+app.get('/movies',(req,res)=>{
     const sql=`select * from movies`;
     client.query(sql).then(data=>{
         res.json(data.rows)
     }).catch(err=>console.error(err))
 })
-app.post('/movies',async(req,res)=>{
+app.post('/movies',(req,res)=>{
     console.log(req.body,"body")
     const userInput=req.body;
     const sql=`insert into movies(title,relase_date,comments,rating) values
