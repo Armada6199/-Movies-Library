@@ -18,26 +18,23 @@ function Movies(title,posterPath,overview){
     this.allMovies.push(this)
 }
 Movies.allMovies=[];
-function handleNotFound(){
-    return {
-    status:404,
-    responeText:"Sorry, Page Not found"
-    }
-}
-function handleServerErorr(){
-    return {
-        status:500,
-        responeText:"Sorry something went wrong"
-    }
-}
+// function handleNotFound(){
+//     return {
+//     status:404,
+//     responeText:"Sorry, Page Not found"
+//     }
+// }
+// function handleServerErorr(){
+//     return {
+//         status:500,
+//         responeText:"Sorry something went wrong"
+//     }
+// }
 
 app.get('/',(req,res)=>{
-    try{
+
         res.send("dsa");
-    }catch{
-        let error=handleServerErorr();
-        res.status(error.status).send(error.responeText); 
-    }
+    
 })
 // app.get('/movies',(req,res)=>{
 //     const sql=`select * from movies`;
@@ -108,10 +105,10 @@ app.get('/',(req,res)=>{
 // })
 
 
-app.get('*',(req,res)=>{
-    let error=handleNotFound();
-    res.status(error.status).send(error.responeText)
-});
+// app.get('*',(req,res)=>{
+//     let error=handleNotFound();
+//     res.status(error.status).send(error.responeText)
+// });
 client.connect().then(con=>{
     app.listen(PORT,()=>{
         console.log(con);
