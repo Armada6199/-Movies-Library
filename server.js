@@ -110,8 +110,5 @@ app.get('/',(req,res)=>{
 //     res.status(error.status).send(error.responeText)
 // });
 client.connect().then(con=>{
-    app.listen(PORT,()=>{
-        console.log(con);
-        console.log(`listening on ${PORT}`)
-    })
-})
+    app.listen(PORT,()=>console.log(`listening on ${PORT}`))
+}).catch(err=>console.log(err))
