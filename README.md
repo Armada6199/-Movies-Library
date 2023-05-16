@@ -25,5 +25,3 @@
 ## getting started
 
 ### to run this app in your machine you need to first run :(npm i) to install the packages and then run :(nodemon server.js)
-
-
