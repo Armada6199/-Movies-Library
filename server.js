@@ -33,7 +33,7 @@ Movies.allMovies=[];
 
 app.get('/',(req,res)=>{
 
-        res.send("dsa");
+        res.send("You ar on the main page ");
     
 })
 app.get('/movies',(req,res)=>{
