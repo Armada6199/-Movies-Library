@@ -105,10 +105,10 @@ app.delete('/delete/:id',async(req,res)=>{
 // })
 
 
-// app.get('*',(req,res)=>{
-//     let error=handleNotFound();
-//     res.status(error.status).send(error.responeText)
-// });
+app.get('*',(req,res)=>{
+    let error=handleNotFound();
+    res.status(error.status).send(error.responeText)
+});
 client.connect().then(con=>{
     app.listen(PORT,()=>console.log(`listening on ${PORT}`))
 })
