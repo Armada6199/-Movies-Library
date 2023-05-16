@@ -32,9 +32,7 @@ Movies.allMovies=[];
 // }
 
 app.get('/',(req,res)=>{
-
         res.send("You ar on the main page ");
-    
 })
 app.get('/movies',(req,res)=>{
     const sql=`select * from movies`;
