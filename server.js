@@ -20,30 +20,37 @@ function handleNotFound(){
     responeText:"Sorry, Page Not found"
     }
 }
-function handleServerErorr(res){
-  res.status(500).send("sorry, something went wrong")
-}
+//here is the error handler middleware 
+app.use((err,req,res,next)=>{
+    res.status(500).json({err})
+})
+// function handleServerErorr(res){
+//   res.status(500).send("sorry, something went wrong")
+// }
 
 app.get('/',(req,res,next)=>{
     try{
         let newMovie=new Movie(movieData.title,movieData.poster_path,movieData.overview)
         res.send(newMovie)
     }catch{
-        handleServerErorr(res);
+        const err=new Error("Sorry something went wrong");
+       next(err )
     }
 })
 app.get('/favorite',(req,res,next)=>{
    try{
     res.send("welcome to favorite page")
    }catch{
-    handleServerErorr(res);
+    const err=new Error("Sorry something went wrong");
+       next(err);
    }
     
 })
 app.get('*',(req,res)=>{
     let error=handleNotFound();
     res.status(error.status).send(error.responeText)
-})
+});
+
 app.listen(PORT,()=>{
     console.log(`listening on ${PORT}`)
 })
