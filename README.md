@@ -1,5 +1,5 @@
 
-# -Movies-Library - Project 1.0.0
+# -Movies-Library - Project 1.4.0
 
 **Mohamad Abdeen**:
 
@@ -24,6 +24,6 @@
 
 ## getting started
 
-### to run this app in your machine you need to first run :(npm i) to install the packages and then run :(nodemon server.js)
+### to run this app in your machine you need to first run :(npm i) to install the packages , and to add to data base you need to first start the database on ur machine then run the schemas file to create the table u can do that by running the dburl in the enviroment file then type -f and the name of the file which is (schemas.sql) and then run :(nodemon server.js) to start the server
 
 
