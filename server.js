@@ -3,7 +3,7 @@ const cors=require("cors");
 const axios=require("axios");
 const pg=require('pg');
 require('dotenv').config()
-const PORT=process.env.PORT;
+const PORT=process.env.PORT||5000;
 const url=process.env.URL;
 const key=process.env.KEY;
 const client=new pg.Client(process.env.DBURL);
@@ -18,34 +18,29 @@ function Movies(title,posterPath,overview){
     this.allMovies.push(this)
 }
 Movies.allMovies=[];
-function handleNotFound(){
-    return {
-    status:404,
-    responeText:"Sorry, Page Not found"
-    }
-}
-function handleServerErorr(){
-    return {
-        status:500,
-        responeText:"Sorry something went wrong"
-    }
-}
+// function handleNotFound(){
+//     return {
+//     status:404,
+//     responeText:"Sorry, Page Not found"
+//     }
+// }
+// function handleServerErorr(){
+//     return {
+//         status:500,
+//         responeText:"Sorry something went wrong"
+//     }
+// }
 
 app.get('/',(req,res)=>{
-    try{
-        res.send("dsa");
-    }catch{
-        let error=handleServerErorr();
-        res.status(error.status).send(error.responeText); 
-    }
+        res.send("You ar on the main page ");
 })
-app.get('/movies',async(req,res)=>{
+app.get('/movies',(req,res)=>{
     const sql=`select * from movies`;
     client.query(sql).then(data=>{
         res.json(data.rows)
     }).catch(err=>console.error(err))
 })
-app.post('/movies',async(req,res)=>{
+app.post('/movies',(req,res)=>{
     console.log(req.body,"body")
     const userInput=req.body;
     const sql=`insert into movies(title,relase_date,comments,rating) values
@@ -113,8 +108,5 @@ app.get('*',(req,res)=>{
     res.status(error.status).send(error.responeText)
 });
 client.connect().then(con=>{
-    app.listen(PORT,()=>{
-        console.log(con);
-        console.log(`listening on ${PORT}`)
-    })
+    app.listen(PORT,()=>console.log(`listening on ${PORT}`))
 })
